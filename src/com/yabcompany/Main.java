@@ -58,7 +58,7 @@ public class Main extends JFrame {
             int[][] values = {{24, 89}, {36, 24}, {12, 37}, {38, 67}};
 
             GraphPrinter.pointGraph(graphName,names,param,values);
-
+            System.out.println(System.getProperty("user.home"));
 
     }
 }
