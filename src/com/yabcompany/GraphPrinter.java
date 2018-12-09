@@ -1,5 +1,5 @@
 package com.yabcompany;
-
+//Памагити! Рамиль опять какую-то непонятную хуйню написал :(
 
 import javax.imageio.ImageIO;
 import java.awt.*;
