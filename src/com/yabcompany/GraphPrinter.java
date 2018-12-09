@@ -50,10 +50,26 @@ public class GraphPrinter {
         g2d.setColor(new Color(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
         g2d.fillRect(0, 0, width, height);
         g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
-        g2d.drawString(graphName, (int) (width * 0.15), (int) (height * 0.2)); // Graph Name
+        g2d.drawString(graphName, (int) (width * 0.15), (int) (height * 0.2)); // Graph
+        g2d.setStroke(new BasicStroke(10));
         g2d.drawLine((int) (width * 0.15), (int) (height * 0.8), (int) (width * 0.85), (int) (height * 0.8)); // X
-        g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
+        //g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
 
+        //Vertical lines
+        g2d.setStroke(new BasicStroke(1));
+        double step = height * 0.5 / 4;
+        for (int i = 0; i < 4; i++) {
+            g2d.drawLine((int) (width * 0.15), (int) (height * 0.3 + i * step), (int) (width * 0.85), (int) (height * 0.3 + i * step));
+        }
+
+        //Names
+        step = width * 0.7 / names.length;
+        font = new Font("Bahnschrift", Font.PLAIN, fontSize/4);
+        g2d.setFont(font);
+        for (int i = 0; i < names.length; i++) {
+            g2d.drawString(names[i], (int) (width * 0.15 + i * step + step/2), (int) (height * 0.85));
+
+        }
 
         g2d.dispose();
 
