@@ -42,10 +42,14 @@ public class PropertiesScanner {
 
     private static int checkProperties() {
         int ans = 0;
+        System.out.println("test");
         try {
             scanner = new Scanner(new File("C:\\Users\\ramil\\Excel\\src\\com\\yabcompany\\config.properties"));
+
             while (scanner.hasNextLine()) {
                 ans++;
+                String line = scanner.nextLine();
+                System.out.println(ans + " " + line);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Cant find properties file");

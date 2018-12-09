@@ -1,5 +1,7 @@
 package com.yabcompany;
 
+import com.yabcompany.Graphs.PointGraph;
+
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,7 +12,7 @@ import java.util.Properties;
 public class Main extends JFrame {
 
         public static void main(String[] args) {
-            FileInputStream fis;
+            /*FileInputStream fis;
             Properties property = new Properties();
 
             try {
@@ -49,8 +51,13 @@ public class Main extends JFrame {
                 ImageIO.write(bufferedImage, "png", file);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
+            String graphName = "Points scored";
+            String[] names = {"Team 1", "Team 2","Team 3","Team 4",};
+            String[] param = {"Period 1", "Period 2"};
+            int[][] values = {{24, 89}, {36, 24}, {12, 37}, {38, 67}};
 
+            GraphPrinter.pointGraph(graphName,names,param,values);
 
 
     }
