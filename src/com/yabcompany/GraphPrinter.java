@@ -35,7 +35,7 @@ public class GraphPrinter {
         TEXT_COLOR = getColor(textColor);
         margin_left = (int) (width * 0.15);
         margin_top = (int) (height * 0.2);
-        margin_right = (int) (width * 0.85);
+        margin_right = (int) (width * 0.8);
         margin_bottom = (int) (height * 0.8);
     }
 
@@ -60,39 +60,39 @@ public class GraphPrinter {
         g2d.drawString(graphName, margin_left, margin_top); // Graph
 
         //Lines
-        drawLines(g2d);
+        int mx = maxValue(values);
+        drawLines(g2d, mx);
 
         //Names
         printNames(g2d, names);
 
         //
-        int mx = maxValue(values);
         System.out.println(mx);
         int[] newColor = getColor(colors[1]);
-        double step = width * 0.7 / names.length;
+        double step = 1.0 * (margin_right - margin_left) / names.length;
         g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
         g2d.setStroke(new BasicStroke(8));
 
         for (int j = 0; j < params.length; j++) {
-            newColor = getColor(colors[j+1]);
+            newColor = getColor(colors[j]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
             for (int i = 0; i < names.length - 1; i++) {
-                g2d.drawLine((int) (margin_left + i * step + step / 2), margin_bottom - (int) (values[i][j] * 0.5 * height / mx),
-                        (int) (margin_left + (i + 1) * step + step / 2), margin_bottom - (int) (values[i + 1][j] * 0.5 * height / mx));
+                g2d.drawLine((int) (margin_left + i * step + step / 2 + step/8), margin_bottom - (int) (values[i][j] * 0.5 * height / mx),
+                        (int) (margin_left + (i + 1) * step + step / 2 + step/8), margin_bottom - (int) (values[i + 1][j] * 0.5 * height / mx));
+
 
             }
+            g2d.fillRect((int)(margin_right + margin_right * 0.03), (int)(height * 0.3 + j * height * 0.05), 50,25);
+            g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
+            g2d.drawString(params[j],(int)(margin_right + margin_right * 0.07), (int)(height * 0.3 + j * height * 0.05) + 20);
+
         }
 
 
         g2d.dispose();
 
-        File file = new File(System.getProperty("user.home"), "Desktop\\image.png");
-        try {
-            ImageIO.write(bufferedImage, "png", file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //saveToPng(bufferedImage);
+
+        saveToPng(bufferedImage);
     }
 
     private static int[] getColor(String color) {
@@ -119,7 +119,7 @@ public class GraphPrinter {
         return mx;
     }
 
-    private static void drawLines(Graphics2D g2d) {
+    private static void drawLines(Graphics2D g2d, int mx) {
         g2d.setStroke(new BasicStroke(10));
         g2d.drawLine(margin_left, margin_bottom, margin_right, margin_bottom); // X
         //g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
@@ -127,18 +127,24 @@ public class GraphPrinter {
         //Vertical lines
         g2d.setStroke(new BasicStroke(1));
         double step = height * 0.5 / 4;
+        String s = "";
+        Font font = new Font("Bahnschrift", Font.PLAIN, fontSize / 3);
+        g2d.setFont(font);
         for (int i = 0; i < 4; i++) {
             g2d.drawLine(margin_left, (int) (height * 0.3 + i * step), margin_right, (int) (height * 0.3 + i * step));
+            s += (int) (mx * 0.25 * (4 - i));
+            g2d.drawString(s, (int)(margin_left * 0.9), (int) (height * 0.3 + i * step));
+            s = "";
         }
 
     }
 
     private static void printNames(Graphics2D g2d, String[] names) {
-        double step = width * 0.7 / names.length;
+        double step = 1.0 * (margin_right - margin_left) / names.length;
         Font font = new Font("Bahnschrift", Font.PLAIN, fontSize / 4);
         g2d.setFont(font);
         for (int i = 0; i < names.length; i++) {
-            g2d.drawString(names[i], (int) (margin_left + i * step + step / 2), (int) (height * 0.85));
+            g2d.drawString(names[i], (int) (margin_left + i * step + step / 2), (int)(margin_bottom + margin_bottom * 0.07));
 
         }
     }
