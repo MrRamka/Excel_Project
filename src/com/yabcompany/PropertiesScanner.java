@@ -21,7 +21,7 @@ public class PropertiesScanner {
 
     public static void setProperties() {
         try {
-            fis = new FileInputStream("C:\\Users\\ramil\\Excel\\src\\com\\yabcompany\\config.properties");
+            fis = new FileInputStream("config.properties");
             int ans = checkProperties();
             property.load(fis);
             width = Integer.parseInt(property.getProperty("screen.width"));
@@ -42,9 +42,8 @@ public class PropertiesScanner {
 
     private static int checkProperties() {
         int ans = 0;
-        System.out.println("test");
         try {
-            scanner = new Scanner(new File("C:\\Users\\ramil\\Excel\\src\\com\\yabcompany\\config.properties"));
+            scanner = new Scanner(new File("config.properties"));
 
             while (scanner.hasNextLine()) {
                 ans++;

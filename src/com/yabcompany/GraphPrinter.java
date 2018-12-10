@@ -1,13 +1,10 @@
 package com.yabcompany;
-//Памагити! Рамиль опять какую-то непонятную хуйню написал :(
 
 import javax.imageio.ImageIO;
-import javax.sound.midi.Soundbank;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class GraphPrinter {
     private static int width;
