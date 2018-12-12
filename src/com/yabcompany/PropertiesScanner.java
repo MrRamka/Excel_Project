@@ -50,10 +50,11 @@ public class PropertiesScanner {
                 String line = scanner.nextLine();
                 System.out.println(ans + " " + line);
             }
+            return ans;
         } catch (FileNotFoundException e) {
             System.out.println("Cant find properties file");
         }
-        return ans;
+        return 4;
     }
 
     public static int getWidth() {

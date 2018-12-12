@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class GraphPrinter {
     private static int width;
@@ -44,9 +45,16 @@ public class GraphPrinter {
 
     }
 
+    /**
+     * @param graphName
+     * @param names
+     * @param params
+     * @param values
+     */
 
     public static void pointGraph(String graphName, String[] names, String[] params, int[][] values) {
         initProperties();
+        checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         Font font = new Font("Bahnschrift", Font.PLAIN, fontSize);
@@ -57,34 +65,31 @@ public class GraphPrinter {
         g2d.drawString(graphName, margin_left, margin_top); // Graph
 
         //Lines
-        int mx = maxValue(values);
+        int mx = maxValue(values, names.length, params.length);
         drawLines(g2d, mx);
 
         //Names
         printNames(g2d, names);
 
-        //
-        System.out.println(mx);
-        int[] newColor = getColor(colors[1]);
-        double step = 1.0 * (margin_right - margin_left) / names.length;
-        g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
-        g2d.setStroke(new BasicStroke(8));
 
+        int[] newColor;
+        double step = 1.0 * (margin_right - margin_left) / names.length;
+        //g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
+        g2d.setStroke(new BasicStroke(8));
+        String[] newColors = createRandomColors(colors);
         for (int j = 0; j < params.length; j++) {
-            newColor = getColor(colors[j]);
+            newColor = getColor(newColors[j]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
             for (int i = 0; i < names.length - 1; i++) {
                 g2d.drawLine((int) (margin_left + i * step + step / 2 + step/8), margin_bottom - (int) (values[i][j] * 0.5 * height / mx),
                         (int) (margin_left + (i + 1) * step + step / 2 + step/8), margin_bottom - (int) (values[i + 1][j] * 0.5 * height / mx));
-
-
             }
             g2d.fillRect((int)(margin_right + margin_right * 0.03), (int)(height * 0.3 + j * height * 0.05), 50,25);
             g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
             g2d.drawString(params[j],(int)(margin_right + margin_right * 0.07), (int)(height * 0.3 + j * height * 0.05) + 20);
-
         }
 
+        //g2d.fillArc(0,0,250,250,0,60);
 
         g2d.dispose();
 
@@ -104,10 +109,10 @@ public class GraphPrinter {
         return currentColor;
     }
 
-    private static int maxValue(int[][] values) {
+    private static int maxValue(int[][] values, int namesLen, int paramLen) {
         int mx = values[0][0];
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 2; j++) {
+        for (int i = 0; i < namesLen; i++) {
+            for (int j = 0; j < paramLen; j++) {
                 if (mx < values[i][j]) {
                     mx = values[i][j];
                 }
@@ -121,7 +126,6 @@ public class GraphPrinter {
         g2d.drawLine(margin_left, margin_bottom, margin_right, margin_bottom); // X
         //g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
 
-        //Vertical lines
         g2d.setStroke(new BasicStroke(1));
         double step = height * 0.5 / 4;
         String s = "";
@@ -152,6 +156,28 @@ public class GraphPrinter {
             ImageIO.write(bufferedImage, "png", file);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static String[] createRandomColors(String[] colors){
+        String [] newColorArr = new String[colors.length];
+        String [] copyColors = Arrays.copyOf(colors, colors.length);
+        int pos;
+        for (int i = 0; i < colors.length - 2; i++) {
+            pos = (int)(Math.random() * (colors.length-(i+1)));
+            newColorArr[i] = copyColors[pos];
+            copyColors[pos] = copyColors[colors.length -1];
+        }
+        return newColorArr;
+    }
+
+    private static void checkNegativeNumbers(int[][] values,int namesLen,int paramLen){
+        for (int i = 0; i < namesLen; i++) {
+            for (int j = 0; j < paramLen; j++) {
+                if (values[i][j] < 0) {
+                    throw new IllegalArgumentException("Problems?)");
+                }
+            }
         }
     }
 }
