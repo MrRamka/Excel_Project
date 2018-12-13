@@ -57,6 +57,8 @@ public class GraphPrinter {
         checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
+        int mx = maxValue(values, names.length, params.length);
+        int[] newColor;
         Font font = new Font("Bahnschrift", Font.PLAIN, fontSize);
         g2d.setFont(font);
         g2d.setColor(new Color(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
@@ -65,16 +67,13 @@ public class GraphPrinter {
         g2d.drawString(graphName, margin_left, margin_top); // Graph
 
         //Lines
-        int mx = maxValue(values, names.length, params.length);
         drawLines(g2d, mx);
 
         //Names
         printNames(g2d, names);
 
 
-        int[] newColor;
         double step = 1.0 * (margin_right - margin_left) / names.length;
-        //g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
         g2d.setStroke(new BasicStroke(8));
         String[] newColors = createRandomColors(colors);
         for (int j = 0; j < params.length; j++) {
@@ -180,4 +179,6 @@ public class GraphPrinter {
             }
         }
     }
+
+
 }
