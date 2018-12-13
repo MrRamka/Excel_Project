@@ -18,7 +18,7 @@ public class PropertiesScanner {
     private static String textColor;
     private static String[] colors;
 
-
+    
     public static void setProperties() {
         try {
             fis = new FileInputStream("config.properties");
