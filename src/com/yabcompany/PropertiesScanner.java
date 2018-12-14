@@ -22,11 +22,11 @@ public class PropertiesScanner {
     public static void setProperties() {
         try {
             fis = new FileInputStream("config.properties");
-            int ans = checkProperties();
+            int ans = checkPropertiesLength();
             property.load(fis);
             width = Integer.parseInt(property.getProperty("screen.width"));
             height = Integer.parseInt(property.getProperty("screen.height"));
-            bgColor = property.getProperty("color.bd");
+            bgColor = property.getProperty("color.bg");
             textColor = property.getProperty("color.text");
             colors = new String[ans-4];
             for (int i = 0; i < colors.length; i++){
@@ -40,7 +40,7 @@ public class PropertiesScanner {
         }
     }
 
-    private static int checkProperties() {
+    private static int checkPropertiesLength() {
         int ans = 0;
         try {
             scanner = new Scanner(new File("config.properties"));

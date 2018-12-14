@@ -39,6 +39,14 @@ public class GraphPrinter {
 
     }
 
+    /**
+     *
+     * @param graphName
+     * @param names
+     * @param params
+     * @param values
+     */
+
     public static void vertColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
         initProperties();
         checkNegativeNumbers(values, names.length, params.length);
@@ -178,7 +186,7 @@ public class GraphPrinter {
 
     private static void printNames(Graphics2D g2d, String[] names) {
         double step = 1.0 * (margin_right - margin_left) / names.length;
-        Font font = new Font("Bahnschrift", Font.PLAIN, fontSize / 4);
+        Font font = new Font("Bahnshrift", Font.PLAIN, fontSize / 4);
         g2d.setFont(font);
         for (int i = 0; i < names.length; i++) {
             g2d.drawString(names[i], (int) (margin_left + i * step + step/3), (int) (margin_bottom + margin_bottom * 0.07));
