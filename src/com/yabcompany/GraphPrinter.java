@@ -72,6 +72,10 @@ public class GraphPrinter {
             for (int j = 0; j < names.length; j++) {
                 g2d.fillRect((int) (step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1)), margin_bottom -(int) (margin_bottom *  0.01)- (int) (values[j][i] * 0.5 * height / mx), (int) (step / (params.length + 1)), (int) (values[j][i] * 0.5 * height / mx));
             }
+            g2d.fillRect((int) (margin_right + margin_right * 0.03), (int) (height * 0.3 + i * height * 0.05), 50, 25);
+            g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
+            g2d.drawString(params[i], (int) (margin_right + margin_right * 0.07), (int) (height * 0.3 + i * height * 0.05) + 20);
+
         }
 
 
@@ -113,8 +117,8 @@ public class GraphPrinter {
             newColor = getColor(newColors[j]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
             for (int i = 0; i < names.length - 1; i++) {
-                g2d.drawLine((int) (margin_left + i * step + step / 2 + step / 8), margin_bottom - (int) (values[i][j] * 0.5 * height / mx),
-                        (int) (margin_left + (i + 1) * step + step / 2 + step / 8), margin_bottom - (int) (values[i + 1][j] * 0.5 * height / mx));
+                g2d.drawLine((int) (margin_left + i * step + step / 3 + step / 8), margin_bottom - (int) (values[i][j] * 0.5 * height / mx),
+                        (int) (margin_left + (i + 1) * step + step / 3 + step / 8), margin_bottom - (int) (values[i + 1][j] * 0.5 * height / mx));
             }
             g2d.fillRect((int) (margin_right + margin_right * 0.03), (int) (height * 0.3 + j * height * 0.05), 50, 25);
             g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
