@@ -7,22 +7,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * @author Ramil Minyukov ramil.minyukov@yandex.ru
+ * @author Rasim Khasanov rasim.2@bk.ru
+ * @author Karim Sharafutdinov shkar2001@mail.ru
+ * @version 14.12.2018.1
+ * @since 8
+ */
+
 public class GraphPrinter {
-    private static int width;
-    private static int height;
-    private static String bgColor;
-    private static String textColor;
-    private static String[] colors;
-    private static int[] BG_COLOR;
-    private static int[] TEXT_COLOR;
-    private static int fontSize = 80;
-    private static int margin_left;
-    private static int margin_top;
-    private static int margin_right;
-    private static int margin_bottom;
+    private int width;
+    private int height;
+    private String bgColor;
+    private String textColor;
+    private String[] colors;
+    private int[] BG_COLOR;
+    private int[] TEXT_COLOR;
+    private int fontSize = 80;
+    private int margin_left;
+    private int margin_top;
+    private int margin_right;
+    private int margin_bottom;
 
 
-    private static void initProperties() {
+    private void initProperties() {
         PropertiesScanner.setProperties();
         width = PropertiesScanner.getWidth();
         height = PropertiesScanner.getHeight();
@@ -40,14 +48,13 @@ public class GraphPrinter {
     }
 
     /**
-     *
      * @param graphName
      * @param names
      * @param params
      * @param values
      */
 
-    public static void vertColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
+    public void vertColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
         initProperties();
         checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -78,7 +85,7 @@ public class GraphPrinter {
             newColor = getColor(newColors[i]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
             for (int j = 0; j < names.length; j++) {
-                g2d.fillRect((int) (step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1)), margin_bottom -(int) (margin_bottom *  0.01)- (int) (values[j][i] * 0.5 * height / mx), (int) (step / (params.length + 1)), (int) (values[j][i] * 0.5 * height / mx));
+                g2d.fillRect((int) (step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1)), margin_bottom - (int) (margin_bottom * 0.01) - (int) (values[j][i] * 0.5 * height / mx), (int) (step / (params.length + 1)), (int) (values[j][i] * 0.5 * height / mx));
             }
             g2d.fillRect((int) (margin_right + margin_right * 0.03), (int) (height * 0.3 + i * height * 0.05), 50, 25);
             g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
@@ -92,12 +99,13 @@ public class GraphPrinter {
     }
 
     /**
-     * @param graphName
-     * @param names
-     * @param params
-     * @param values
+     * @param graphName name of graphic
+     * @param names     names of columns
+     * @param params    names of parameters
+     * @param values    array of input vqlues
+     * @throws IllegalArgumentException if values[][] has a negative numbers
      */
-    public static void pointGraph(String graphName, String[] names, String[] params, int[][] values) {
+    public void pointGraph(String graphName, String[] names, String[] params, int[][] values) {
         initProperties();
         checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -141,7 +149,7 @@ public class GraphPrinter {
         saveToPng(bufferedImage);
     }
 
-    private static int[] getColor(String color) {
+    private int[] getColor(String color) {
         int[] currentColor = new int[3];
         try {
             currentColor[0] = Integer.valueOf(color.substring(1, 3), 16);
@@ -153,7 +161,7 @@ public class GraphPrinter {
         return currentColor;
     }
 
-    private static int maxValue(int[][] values, int namesLen, int paramLen) {
+    private int maxValue(int[][] values, int namesLen, int paramLen) {
         int mx = values[0][0];
         for (int i = 0; i < namesLen; i++) {
             for (int j = 0; j < paramLen; j++) {
@@ -165,7 +173,7 @@ public class GraphPrinter {
         return mx;
     }
 
-    private static void drawLines(Graphics2D g2d, int mx) {
+    private void drawLines(Graphics2D g2d, int mx) {
         g2d.setStroke(new BasicStroke(10));
         g2d.drawLine(margin_left, margin_bottom, margin_right, margin_bottom); // X
         //g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
@@ -184,17 +192,17 @@ public class GraphPrinter {
 
     }
 
-    private static void printNames(Graphics2D g2d, String[] names) {
+    private void printNames(Graphics2D g2d, String[] names) {
         double step = 1.0 * (margin_right - margin_left) / names.length;
         Font font = new Font("Bahnshrift", Font.PLAIN, fontSize / 4);
         g2d.setFont(font);
         for (int i = 0; i < names.length; i++) {
-            g2d.drawString(names[i], (int) (margin_left + i * step + step/3), (int) (margin_bottom + margin_bottom * 0.07));
+            g2d.drawString(names[i], (int) (margin_left + i * step + step / 3), (int) (margin_bottom + margin_bottom * 0.07));
 
         }
     }
 
-    private static void saveToPng(BufferedImage bufferedImage) {
+    private void saveToPng(BufferedImage bufferedImage) {
         File file = new File(System.getProperty("user.home"), "Desktop\\Graph.png");
         try {
             ImageIO.write(bufferedImage, "png", file);
@@ -203,7 +211,7 @@ public class GraphPrinter {
         }
     }
 
-    private static String[] createRandomColors(String[] colors) {
+    private String[] createRandomColors(String[] colors) {
         String[] newColorArr = new String[colors.length];
         String[] copyColors = Arrays.copyOf(colors, colors.length);
         int pos;
@@ -215,7 +223,7 @@ public class GraphPrinter {
         return newColorArr;
     }
 
-    private static void checkNegativeNumbers(int[][] values, int namesLen, int paramLen) {
+    private void checkNegativeNumbers(int[][] values, int namesLen, int paramLen) {
         for (int i = 0; i < namesLen; i++) {
             for (int j = 0; j < paramLen; j++) {
                 if (values[i][j] < 0) {
