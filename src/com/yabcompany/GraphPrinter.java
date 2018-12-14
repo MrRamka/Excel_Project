@@ -22,7 +22,7 @@ public class GraphPrinter {
     private static int margin_bottom;
 
 
-    protected static void initProperties() {
+    private static void initProperties() {
         PropertiesScanner.setProperties();
         width = PropertiesScanner.getWidth();
         height = PropertiesScanner.getHeight();
@@ -216,19 +216,4 @@ public class GraphPrinter {
             }
         }
     }
-
-    protected static void chlen(String graphName, String[] names, String[] params, int[][] values) {
-        initProperties();
-        checkNegativeNumbers(values, names.length, params.length);
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = bufferedImage.createGraphics();
-        Font font = new Font("Bahnschrift", Font.PLAIN, fontSize);
-        g2d.setFont(font);
-        g2d.setColor(new Color(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
-        g2d.fillRect(0, 0, width, height);
-        g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
-        g2d.drawString(graphName, margin_left, margin_top); // Graph
-    }
-
-
 }

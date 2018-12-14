@@ -7,7 +7,7 @@ public class Main {
         String graphName = "Points scored";
         String[] names = {"Team A", "Team B", "Team C", "Team D","Team E"};
         String[] param = {"Period 1", "Period 2","Period 3"};
-        int[][] values = {{20, 10, 40}, {25, 50, 60}, {75, 30,90}, {40, 60, 20  }, {75,40,100}};
+        int[][] values = {{20, 10, 40}, {25, 50, 60}, {75, 30,90}, {40, 60, 20  }, {75,40,90}};
 
         GraphPrinter.vertColumnGraph(graphName, names, param, values);
 
