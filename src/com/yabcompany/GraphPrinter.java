@@ -28,9 +28,11 @@ public class GraphPrinter {
     private int margin_top;
     private int margin_right;
     private int margin_bottom;
+    private int P = 30;
 
 
-    private void initProperties() {
+    protected void initProperties() {
+
         PropertiesScanner.setProperties();
         width = PropertiesScanner.getWidth();
         height = PropertiesScanner.getHeight();
@@ -44,7 +46,52 @@ public class GraphPrinter {
         margin_right = (int) (width * 0.8);
         margin_bottom = (int) (height * 0.8);
 
+    }
 
+    public void linearGraph(String graphName, String[] names, String[] params, int [][] values) {
+        initProperties();
+        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        Font font = new Font("Moishrift", Font.PLAIN, fontSize);
+        g2d.setFont(font);
+        g2d.setColor(new Color(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]));
+        g2d.fillRect(0, 0, width, height);
+        g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
+        g2d.drawString(graphName, margin_left, margin_top); // Graph
+
+        //Lines
+        int mx = maxValue(values, names.length, params.length);
+        drawLinesLinear(g2d, mx);
+
+        //Names
+        printNamesLinear(g2d, names);
+
+        //
+        System.out.println(mx);
+        int[] newColor = getColor(colors[1]);
+        double step = 1.0 * (margin_top - margin_bottom) / names.length;
+        g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
+        g2d.setStroke(new BasicStroke(P));
+
+        int printingHeight = (int)(height*0.8) + 5;//какая-то высота, которая увеличивается с каждым новым names
+        for (int i = 0; i < names.length; i++) {
+            newColor = getColor(colors[i]);
+            g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
+            for (int j = 0; j < params.length; j++) {
+                g2d.drawLine( (int) (width * 0.15 + 10),(printingHeight + (int)step + j * P),
+                        (int) (width * 0.15 + 10 +values[i][j] * 0.5 * width / mx),(printingHeight + (int)step + j * P ));//всё очень сомнительно...
+            }
+            printingHeight = printingHeight + (int)step + params.length*P + params.length - 1;
+        }
+        for (int i = 0; i < params.length; i++) {
+            newColor = getColor(colors[i]);
+            g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
+            g2d.fillRect((int)(width*6*0.15) , (height-margin_top), 25,25);
+            g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
+            g2d.drawString(params[i],((int)(width*6*0.15)), (height-margin_top-i*50 - 5));
+        }
+        g2d.dispose();
+        saveToPng(bufferedImage);
     }
 
     /**
@@ -85,7 +132,10 @@ public class GraphPrinter {
             newColor = getColor(newColors[i]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
             for (int j = 0; j < names.length; j++) {
-                g2d.fillRect((int) (step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1)), margin_bottom - (int) (margin_bottom * 0.01) - (int) (values[j][i] * 0.5 * height / mx), (int) (step / (params.length + 1)), (int) (values[j][i] * 0.5 * height / mx));
+                g2d.fillRect((int) (step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1)),
+                        margin_bottom - (int) (margin_bottom * 0.01) - (int) (values[j][i] * 0.5 * height / mx),
+                        (int) (step / (params.length + 1)),
+                        (int) (values[j][i] * 0.5 * height / mx));
             }
             g2d.fillRect((int) (margin_right + margin_right * 0.03), (int) (height * 0.3 + i * height * 0.05), 50, 25);
             g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
@@ -105,6 +155,7 @@ public class GraphPrinter {
      * @param values    array of input vqlues
      * @throws IllegalArgumentException if values[][] has a negative numbers
      */
+
     public void pointGraph(String graphName, String[] names, String[] params, int[][] values) {
         initProperties();
         checkNegativeNumbers(values, names.length, params.length);
@@ -230,6 +281,34 @@ public class GraphPrinter {
                     throw new IllegalArgumentException("Values can't be negative(<0)");
                 }
             }
+        }
+    }
+
+    private void drawLinesLinear(Graphics2D g2d, int mx) {
+        g2d.setStroke(new BasicStroke(10));
+        g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
+        //переписал метод под вертикальные линии(просто вставил то что написал рамиль)
+        //Vertical lines
+        g2d.setStroke(new BasicStroke(1));
+        double step = width * 0.5 / 5;
+        String s = "";
+        Font font = new Font("Bahnschrift", Font.PLAIN, fontSize / 3);
+        g2d.setFont(font);
+        for (int i = 0; i < 5; i++) {
+            g2d.drawLine((int) (width * 0.15*(i+1)), (int) (height * 0.3), (int) (width * 0.15*(i+1)), (int) (height * 0.8));
+            s += (int) (mx * 0.25 * (i));
+            g2d.drawString(s, (int) (width * 0.15*(i+1)), (int)(margin_bottom + 30));
+            s = "";
+        }
+
+    }
+
+    private void printNamesLinear(Graphics2D g2d, String[] names) {
+        double step = 1.0 * (margin_top - margin_bottom) / names.length;
+        Font font = new Font("Bahnschrift", Font.PLAIN, fontSize / 4);
+        g2d.setFont(font);
+        for (int i = 0; i < names.length; i++) {
+            g2d.drawString(names[i], (int)(margin_left - 100), (int)(height - step*(i+1))); //?? возможно выйдет за рамки (+ в х поменял на -)
         }
     }
 }

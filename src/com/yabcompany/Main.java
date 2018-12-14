@@ -10,7 +10,7 @@ public class Main {
         int[][] values = {{20, 10, 40}, {25, 50, 60}, {75, 30,90}, {40, 60, 20  }, {75,40,90}};
 
         GraphPrinter gp = new GraphPrinter();
-        gp.pointGraph(graphName, names, param, values);
+        gp.vertColumnGraph(graphName, names, param, values);
 
 
     }
