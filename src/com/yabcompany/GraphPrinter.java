@@ -29,7 +29,7 @@ public class GraphPrinter {
     private int margin_right;
     private int margin_bottom;
 
-    GraphPrinter() {
+    public GraphPrinter() {
 
         PropertiesScanner.setProperties();
         width = PropertiesScanner.getWidth();
@@ -52,7 +52,7 @@ public class GraphPrinter {
      * @param params    names of parameters
      * @param values    array of input values
      * @return BufferedImage
-     * @throws IllegalArgumentException if values[][] has a negative numbers
+     * @throws IllegalArgumentException if array values[][] has a negative numbers
      */
 
     public BufferedImage horizColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
@@ -182,7 +182,7 @@ public class GraphPrinter {
      * @param bufferedImage bufferedImage
      * @param fileName      name of file
      */
-    public void saveToPng(BufferedImage bufferedImage, String fileName) {
+    public void saveToPNG(BufferedImage bufferedImage, String fileName) {
         File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".png");
         try {
             ImageIO.write(bufferedImage, "png", file);
@@ -196,7 +196,7 @@ public class GraphPrinter {
      * @param bufferedImage bufferedImage
      * @param fileName      name of file
      */
-    public void saveToJpg(BufferedImage bufferedImage, String fileName) {
+    public void saveToJPG(BufferedImage bufferedImage, String fileName) {
         File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".jpg");
         try {
             ImageIO.write(bufferedImage, "jpg", file);
@@ -230,7 +230,7 @@ public class GraphPrinter {
             currentColor[1] = Integer.valueOf(color.substring(3, 5), 16);
             currentColor[2] = Integer.valueOf(color.substring(5, 7), 16);
         } catch (NumberFormatException e) {
-            System.out.println("Enter correct color");
+            //System.out.println("Enter correct color");
         }
         return currentColor;
     }

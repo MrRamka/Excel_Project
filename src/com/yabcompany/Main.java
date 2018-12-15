@@ -13,11 +13,11 @@ public class Main {
 
         GraphPrinter gp = new GraphPrinter();
         bufferedImage = gp.horizColumnGraph(graphName, names, param, values);
-        gp.saveToPng(bufferedImage, "Hor");
+        gp.saveToPNG(bufferedImage, "Horizontal Column Graph");
         bufferedImage = gp.pointGraph(graphName, names, param, values);
-        gp.saveToPng(bufferedImage, "Poi");
+        gp.saveToPNG(bufferedImage, "Linear Graph");
         bufferedImage = gp.vertColumnGraph(graphName, names, param, values);
-        gp.saveToPng(bufferedImage, "Ver");
+        gp.saveToPNG(bufferedImage, "Vertical Column Graph");
 
 
     }
