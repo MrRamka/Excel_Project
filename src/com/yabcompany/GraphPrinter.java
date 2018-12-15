@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author Ramil Minyukov ramil.minyukov@yandex.ru
  * @author Rasim Khasanov rasim.2@bk.ru
  * @author Karim Sharafutdinov shkar2001@mail.ru
- * @version 14.12.2018.1
+ * @version 15.12.2018.2
  * @since 8
  */
 
@@ -28,8 +28,6 @@ public class GraphPrinter {
     private int margin_top;
     private int margin_right;
     private int margin_bottom;
-    private int P = 30;
-
 
     GraphPrinter() {
 
@@ -48,31 +46,33 @@ public class GraphPrinter {
 
     }
 
-    //Karim`s part
-    public void horizColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
-        //initProperties();
+    /**
+     * @param graphName name of graphic
+     * @param names     names of columns
+     * @param params    names of parameters
+     * @param values    array of input values
+     * @return BufferedImage
+     * @throws IllegalArgumentException if values[][] has a negative numbers
+     */
+
+    public BufferedImage horizColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
+
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         Font font = new Font("Moishrift", Font.PLAIN, fontSize);
+        int mx = maxValue(values, names.length, params.length);
 
         printMainPart(g2d, font, graphName);
 
-        //Lines
-        int mx = maxValue(values, names.length, params.length);
         drawLinesLinear(g2d, mx);
 
-        //Names
         printNamesLinear(g2d, names);
 
         int[] newColor;
 
         double step = 1.0 * (margin_bottom - 0.3 * height) / names.length;
-        //g2d.setStroke(new BasicStroke(P));
         String[] newColors = createRandomColors(colors);
         g2d.setColor(new Color(TEXT_COLOR[0], TEXT_COLOR[1], TEXT_COLOR[2]));
-
-        //g2d.fillRect(margin_left, (int)(0.3 * height), 500,100);
-        //(int)(step * (j + 1) + step / (params.length + 1) + (i) * step / (params.length + 1))
         for (int i = 0; i < params.length; i++) {
             newColor = getColor(newColors[i]);
             g2d.setColor(new Color(newColor[0], newColor[1], newColor[2]));
@@ -86,18 +86,19 @@ public class GraphPrinter {
             printParameters(g2d, params[i], i);
         }
         g2d.dispose();
-        saveToPng(bufferedImage);
+        return bufferedImage;
     }
 
     /**
-     * @param graphName
-     * @param names
-     * @param params
-     * @param values
+     * @param graphName name of graphic
+     * @param names     names of columns
+     * @param params    names of parameters
+     * @param values    array of input values
+     * @return BufferedImage
+     * @throws IllegalArgumentException if values[][] has a negative numbers
      */
 
-    public void vertColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
-        //initProperties();
+    public BufferedImage vertColumnGraph(String graphName, String[] names, String[] params, int[][] values) {
         checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
@@ -129,18 +130,19 @@ public class GraphPrinter {
         }
 
         g2d.dispose();
-        saveToPng(bufferedImage);
+        return bufferedImage;
     }
 
     /**
      * @param graphName name of graphic
      * @param names     names of columns
      * @param params    names of parameters
-     * @param values    array of input vqlues
+     * @param values    array of input values
+     * @return BufferedImage
      * @throws IllegalArgumentException if values[][] has a negative numbers
      */
 
-    public void pointGraph(String graphName, String[] names, String[] params, int[][] values) {
+    public BufferedImage pointGraph(String graphName, String[] names, String[] params, int[][] values) {
         checkNegativeNumbers(values, names.length, params.length);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = bufferedImage.createGraphics();
@@ -173,8 +175,36 @@ public class GraphPrinter {
         }
 
         g2d.dispose();
+        return bufferedImage;
+    }
 
-        saveToPng(bufferedImage);
+    /**
+     * @param bufferedImage bufferedImage
+     * @param fileName      name of file
+     */
+    public void saveToPng(BufferedImage bufferedImage, String fileName) {
+        File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".png");
+        try {
+            ImageIO.write(bufferedImage, "png", file);
+            System.out.println("Saved to " + System.getProperty("user.home") + "\\Desktop\\" + fileName + ".png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param bufferedImage bufferedImage
+     * @param fileName      name of file
+     */
+    public void saveToJpg(BufferedImage bufferedImage, String fileName) {
+        File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".jpg");
+        try {
+            ImageIO.write(bufferedImage, "jpg", file);
+            System.out.println("Saved to " + System.getProperty("user.home") + "\\Desktop\\" + fileName + ".jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void printMainPart(Graphics2D g2d, Font font, String graphName) {
@@ -220,8 +250,6 @@ public class GraphPrinter {
     private void drawLines(Graphics2D g2d, int mx) {
         g2d.setStroke(new BasicStroke(10));
         g2d.drawLine(margin_left, margin_bottom, margin_right, margin_bottom); // X
-        //g2d.drawLine((int) (width * 0.15), (int) (height * 0.3), (int) (width * 0.15), (int) (height * 0.8)); // Y
-
         g2d.setStroke(new BasicStroke(1));
         double step = height * 0.5 / 4;
         String s = "";
@@ -243,15 +271,6 @@ public class GraphPrinter {
         for (int i = 0; i < names.length; i++) {
             g2d.drawString(names[i], (int) (margin_left + i * step + step / 3), (int) (margin_bottom + margin_bottom * 0.07));
 
-        }
-    }
-
-    private void saveToPng(BufferedImage bufferedImage) {
-        File file = new File(System.getProperty("user.home"), "Desktop\\Graph.png");
-        try {
-            ImageIO.write(bufferedImage, "png", file);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -302,5 +321,25 @@ public class GraphPrinter {
         for (int i = 0; i < names.length; i++) {
             g2d.drawString(names[i], (int) (margin_left * 0.6), (int) (height * 0.3 + step * (i) + step / 3)); //?? возможно выйдет за рамки (+ в х поменял на -)
         }
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setBgColor(String bgColor) {
+        this.bgColor = bgColor;
+    }
+
+    public void setTextColor(String textColor) {
+        this.textColor = textColor;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
     }
 }

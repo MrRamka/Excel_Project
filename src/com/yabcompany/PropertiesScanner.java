@@ -48,7 +48,6 @@ public class PropertiesScanner {
             while (scanner.hasNextLine()) {
                 ans++;
                 String line = scanner.nextLine();
-                System.out.println(ans + " " + line);
             }
             return ans;
         } catch (FileNotFoundException e) {
