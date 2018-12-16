@@ -1,5 +1,5 @@
 package com.yabcompany.GraphPrinter;
-
+//ToDO: JavaDoc
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
