@@ -1,4 +1,4 @@
-package com.yabcompany;
+package com.yabcompany.GraphPrinter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,6 +16,7 @@ import java.util.Arrays;
  */
 
 public class GraphPrinter {
+    private PropertiesScanner propertiesScanner;
     private int width;
     private int height;
     private String bgColor;
@@ -28,15 +29,19 @@ public class GraphPrinter {
     private int margin_top;
     private int margin_right;
     private int margin_bottom;
+    private String configPath;
+    private String destinationPath;
 
-    public GraphPrinter() {
-
-        PropertiesScanner.setProperties();
-        width = PropertiesScanner.getWidth();
-        height = PropertiesScanner.getHeight();
-        bgColor = PropertiesScanner.getBgColor();
-        textColor = PropertiesScanner.getTextColor();
-        colors = PropertiesScanner.getColors();
+    public GraphPrinter(String configPath, String destinationPath) throws IOException {
+        this.configPath = configPath;
+        this.destinationPath = destinationPath;
+        propertiesScanner = new PropertiesScanner(configPath);
+        propertiesScanner.setProperties();
+        width = propertiesScanner.getWidth();
+        height = propertiesScanner.getHeight();
+        bgColor = propertiesScanner.getBgColor();
+        textColor = propertiesScanner.getTextColor();
+        colors = propertiesScanner.getColors();
         BG_COLOR = getColor(bgColor);
         TEXT_COLOR = getColor(textColor);
         margin_left = (int) (width * 0.15);
@@ -179,32 +184,16 @@ public class GraphPrinter {
     }
 
     /**
-     * @param bufferedImage bufferedImage
-     * @param fileName      name of file
+     *
+     * @param bufferedImage is Image which is Buffered
+     * @param fileName is name of file
+     * @param format is format of file (JPG, PNG, BMP etc.)
+     * @throws IOException if file is null
      */
-    public void saveToPNG(BufferedImage bufferedImage, String fileName) {
-        File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".png");
-        try {
-            ImageIO.write(bufferedImage, "png", file);
-            System.out.println("Saved to " + System.getProperty("user.home") + "\\Desktop\\" + fileName + ".png");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * @param bufferedImage bufferedImage
-     * @param fileName      name of file
-     */
-    public void saveToJPG(BufferedImage bufferedImage, String fileName) {
-        File file = new File(System.getProperty("user.home"), "Desktop\\" + fileName + ".jpg");
-        try {
-            ImageIO.write(bufferedImage, "jpg", file);
-            System.out.println("Saved to " + System.getProperty("user.home") + "\\Desktop\\" + fileName + ".jpg");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public void saveToImage(BufferedImage bufferedImage, String fileName, String format) throws IOException {
+        File file = new File(this.destinationPath + "\\" +  fileName + "." + format);
+        ImageIO.write(bufferedImage, format, file);
+        System.out.println("Saved to " + this.destinationPath + "\\" +  fileName + "." + format);
     }
 
     private void printMainPart(Graphics2D g2d, Font font, String graphName) {
@@ -341,5 +330,21 @@ public class GraphPrinter {
 
     public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
+    }
+
+    public String getConfigPath() {
+        return configPath;
+    }
+
+    public void setConfigPath(String configPath) {
+        this.configPath = configPath;
+    }
+
+    public String getDestinationPath() {
+        return destinationPath;
+    }
+
+    public void setDestinationPath(String destinationPath) {
+        this.destinationPath = destinationPath;
     }
 }
