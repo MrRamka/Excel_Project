@@ -184,16 +184,15 @@ public class GraphPrinter {
     }
 
     /**
-     *
      * @param bufferedImage is Image which is Buffered
-     * @param fileName is name of file
-     * @param format is format of file (JPG, PNG, BMP etc.)
+     * @param fileName      is name of file
+     * @param format        is format of file (JPG, PNG, BMP etc.)
      * @throws IOException if file is null
      */
     public void saveToImage(BufferedImage bufferedImage, String fileName, String format) throws IOException {
-        File file = new File(this.destinationPath + "\\" +  fileName + "." + format);
+        File file = new File(this.destinationPath + "\\" + fileName + "." + format);
         ImageIO.write(bufferedImage, format, file);
-        System.out.println("Saved to " + this.destinationPath + "\\" +  fileName + "." + format);
+        System.out.println("Saved to " + this.destinationPath + "\\" + fileName + "." + format);
     }
 
     private void printMainPart(Graphics2D g2d, Font font, String graphName) {
